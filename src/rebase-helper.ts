@@ -2,12 +2,16 @@ import * as core from '@actions/core'
 import {GitCommandManager} from './git-command-manager'
 import {Pull} from './pulls-helper'
 import {v4 as uuidv4} from 'uuid'
+import {context} from '@actions/github'
+import {Octokit} from 'octokit'
 
 export class RebaseHelper {
   private git: GitCommandManager
+  private token: string // GITHUB_TOKEN
 
-  constructor(git: GitCommandManager) {
+  constructor(git: GitCommandManager, token: string) {
     this.git = git
+    this.token = token
   }
 
   async rebase(pull: Pull): Promise<boolean> {
@@ -65,8 +69,16 @@ export class RebaseHelper {
       )
     } else if (result == RebaseResult.Failed) {
       core.info(
-        `Rebase of head ref '${pull.headRef}' failed. Conflicts must be resolved manually.`
+        `Rebase of Pull Request '#${pull.number}' failed. Conflicts must be resolved manually.`
       )
+
+      const octokit = new Octokit({auth: this.token})
+      await octokit.rest.issues.createComment({
+        ...context.repo,
+        issue_number: pull.number,
+        body: 'Auto rebase failed ❌ Please rebase manually'
+      })
+
       // Try to abort any in-progress rebase
       await this.git.exec(['rebase', '--abort'], true)
     }

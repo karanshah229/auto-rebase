@@ -51,7 +51,7 @@ async function run(): Promise<void> {
       // Rebase
       // Create a git command manager
       const git = await GitCommandManager.create(sourceSettings.repositoryPath)
-      const rebaseHelper = new RebaseHelper(git)
+      const rebaseHelper = new RebaseHelper(git, inputs.token)
       let rebasedCount = 0
       for (const pull of pulls) {
         const result = await rebaseHelper.rebase(pull)

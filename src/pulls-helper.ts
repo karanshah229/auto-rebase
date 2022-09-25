@@ -52,13 +52,14 @@ export class PullsHelper {
                 }
               }
               maintainerCanModify
+              number
             }
           }
         }
       }
     }`
     const pulls = await this.graphqlClient<Pulls>(query, params)
-    core.debug(`Pulls: ${inspect(pulls.repository.pullRequests.edges)}`)
+    core.info(`Pulls: ${inspect(pulls.repository.pullRequests.edges)}`)
 
     const filteredPulls = pulls.repository.pullRequests.edges
       .map(p => {
@@ -89,7 +90,8 @@ export class PullsHelper {
             p.node.baseRefName,
             p.node.headRepository.url,
             p.node.headRepository.nameWithOwner,
-            p.node.headRefName
+            p.node.headRefName,
+            p.node.number
           )
         }
       })
@@ -120,6 +122,7 @@ type Edge = {
       nodes: Label[]
     }
     maintainerCanModify: boolean
+    number: number
   }
 }
 
@@ -136,16 +139,19 @@ export class Pull {
   headRepoUrl: string
   headRepoName: string
   headRef: string
+  number: number
   constructor(
     baseRef: string,
     headRepoUrl: string,
     headRepoName: string,
-    headRef: string
+    headRef: string,
+    number: number
   ) {
     this.baseRef = baseRef
     this.headRepoUrl = headRepoUrl
     this.headRepoName = headRepoName
     this.headRef = headRef
+    this.number = number
   }
 }
 
