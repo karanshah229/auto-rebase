@@ -1,4 +1,4 @@
-name: 'Rebase Pulls'
+name: 'Auto Rebase Pulls'
 description: 'Rebase pull requests in a repository'
 inputs:
   token:
