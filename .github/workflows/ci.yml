@@ -38,58 +38,58 @@ jobs:
           name: action.yml
           path: action.yml
 
-  test:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-    needs: [build]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target: [built, committed]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: main
-      - if: matrix.target == 'built' || github.event_name == 'pull_request'
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist
-      - if: matrix.target == 'built' || github.event_name == 'pull_request'
-        uses: actions/download-artifact@v3
-        with:
-          name: action.yml
-          path: .
+  # test:
+  #   if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       target: [built, committed]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: main
+  #     - if: matrix.target == 'built' || github.event_name == 'pull_request'
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: dist
+  #         path: dist
+  #     - if: matrix.target == 'built' || github.event_name == 'pull_request'
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: action.yml
+  #         path: .
 
-      - name: Rebase with head filter
-        id: rebase1
-        uses: ./
-        with:
-          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
-          head: peter-evans:test-fixtures/1/head
-      - if: steps.rebase1.outputs.rebased-count != 1
-        run: exit 1
+  #     - name: Rebase with head filter
+  #       id: rebase1
+  #       uses: ./
+  #       with:
+  #         token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+  #         repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
+  #         head: peter-evans:test-fixtures/1/head
+  #     - if: steps.rebase1.outputs.rebased-count != 1
+  #       run: exit 1
 
-      - name: Rebase with base filter
-        id: rebase2
-        uses: ./
-        with:
-          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
-          base: test-fixtures/2/base
-      - if: steps.rebase2.outputs.rebased-count != 1
-        run: exit 1
+  #     - name: Rebase with base filter
+  #       id: rebase2
+  #       uses: ./
+  #       with:
+  #         token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+  #         repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
+  #         base: test-fixtures/2/base
+  #     - if: steps.rebase2.outputs.rebased-count != 1
+  #       run: exit 1
 
-      - name: Rebase
-        id: rebase3
-        uses: ./
-        with:
-          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
-          exclude-labels: |
-            no-rebase
-      - if: steps.rebase3.outputs.rebased-count < 2
-        run: exit 1
+  #     - name: Rebase
+  #       id: rebase3
+  #       uses: ./
+  #       with:
+  #         token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+  #         repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
+  #         exclude-labels: |
+  #           no-rebase
+  #     - if: steps.rebase3.outputs.rebased-count < 2
+  #       run: exit 1
 
   package:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
