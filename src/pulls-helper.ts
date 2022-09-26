@@ -122,6 +122,7 @@ type Edge = {
       nodes: Label[]
     }
     maintainerCanModify: boolean
+    number: number
   }
 }
 
