@@ -92,7 +92,8 @@ export class PullsHelper {
 						p.node.baseRefName,
 						p.node.headRepository.url,
 						p.node.headRepository.nameWithOwner,
-						p.node.headRefName
+						p.node.headRefName,
+						p.node.number
 					);
 				}
 			})
