@@ -65,7 +65,7 @@ export class RebaseHelper {
       )
     } else if (result == RebaseResult.Failed) {
       core.info(
-        `Rebase of head ref '${pull.headRef}' failed. Conflicts must be resolved manually.`
+        `Rebase of Pull Request '#${pull.number}' failed. Conflicts must be resolved manually.`
       )
       // Try to abort any in-progress rebase
       await this.git.exec(['rebase', '--abort'], true)
