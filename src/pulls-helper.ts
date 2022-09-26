@@ -36,6 +36,7 @@ export class PullsHelper {
         pullRequests(first: 100, states: OPEN, headRefName: $head, baseRefName: $base) {
           edges {
             node {
+              number
               baseRefName
               headRefName
               headRepository {
@@ -98,8 +99,6 @@ export class PullsHelper {
 			.filter(notUndefined);
 		core.debug(`filteredPulls: ${inspect(filteredPulls)}`);
 
-		core.info("filteredPulls");
-		core.info(filteredPulls);
 		return filteredPulls;
 	}
 }
@@ -136,16 +135,19 @@ type Pulls = {
 };
 
 export class Pull {
+	number: number;
 	baseRef: string;
 	headRepoUrl: string;
 	headRepoName: string;
 	headRef: string;
 	constructor(
+		number: number,
 		baseRef: string,
 		headRepoUrl: string,
 		headRepoName: string,
 		headRef: string
 	) {
+		this.number = number;
 		this.baseRef = baseRef;
 		this.headRepoUrl = headRepoUrl;
 		this.headRepoName = headRepoName;
