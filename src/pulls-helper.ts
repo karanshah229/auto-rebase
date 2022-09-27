@@ -36,7 +36,6 @@ export class PullsHelper {
         pullRequests(first: 100, states: OPEN, headRefName: $head, baseRefName: $base) {
           edges {
             node {
-              number
               baseRefName
               headRefName
               headRepository {
@@ -53,6 +52,7 @@ export class PullsHelper {
                 }
               }
               maintainerCanModify
+              number
             }
           }
         }
@@ -98,6 +98,7 @@ export class PullsHelper {
       })
       .filter(notUndefined)
     core.debug(`filteredPulls: ${inspect(filteredPulls)}`)
+    core.info(`filteredPulls: ${inspect(filteredPulls)}`)
 
     return filteredPulls
   }
