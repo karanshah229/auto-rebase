@@ -65,8 +65,8 @@ jobs:
         uses: ./
         with:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: karanshah229/rebase-test-fixture-${{ matrix.target }}
-          head: karanshah229:test-fixtures/1/head
+          repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
+          head: peter-evans:test-fixtures/1/head
       - if: steps.rebase1.outputs.rebased-count != 1
         run: exit 1
 
@@ -75,7 +75,7 @@ jobs:
         uses: ./
         with:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: karanshah229/rebase-test-fixture-${{ matrix.target }}
+          repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
           base: test-fixtures/2/base
       - if: steps.rebase2.outputs.rebased-count != 1
         run: exit 1
@@ -85,7 +85,7 @@ jobs:
         uses: ./
         with:
           token: ${{ secrets.ACTIONS_BOT_TOKEN }}
-          repository: karanshah229/rebase-test-fixture-${{ matrix.target }}
+          repository: peter-evans/rebase-test-fixture-${{ matrix.target }}
           exclude-labels: |
             no-rebase
       - if: steps.rebase3.outputs.rebased-count < 2
