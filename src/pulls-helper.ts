@@ -59,7 +59,7 @@ export class PullsHelper {
       }
     }`
     const pulls = await this.graphqlClient<Pulls>(query, params)
-    core.debug(`Pulls: ${inspect(pulls.repository.pullRequests.edges)}`)
+    core.info(`Pulls: ${inspect(pulls.repository.pullRequests.edges)}`)
 
     const filteredPulls = pulls.repository.pullRequests.edges
       .map(p => {
